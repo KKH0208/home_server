@@ -70,6 +70,110 @@
                        └─────────────────┘
 ```
 
+📋 홈서버 구축 로드맵
+Phase 1: 기초 환경 구축 (1~2주) 🚀
+┌─ 1.1) EC2 Docker 환경 세팅
+│   └─ Docker, Docker Compose 설치
+│   └─ 보안그룹 설정 (포트 허용)
+│
+├─ 1.2) 현재 애플리케이션 정리
+│   └─ main.py 개선 (로깅, 에러 핸들링)
+│   └─ requirements.txt 최종 확인
+│   └─ Dockerfile 최적화
+│
+└─ 1.3) Docker 로컬 테스트
+    └─ docker-compose.yml으로 main_server + redis 실행
+    └─ websocket 통신 확인
 
+Phase 2: 모니터링 & 로깅 기초 (2~3주) 📊
+├─ 2.1) Prometheus 설정
+│   └─ 애플리케이션 메트릭 수집 (CPU, 메모리, 요청수)
+│   └─ Redis 메트릭 모니터링
+│
+├─ 2.2) Grafana 대시보드
+│   └─ 실시간 성능 모니터링
+│   └─ 알림 규칙 설정
+│
+└─ 2.3) Loki + Promtail (로그 수집)
+    └─ 애플리케이션 로그 수집
+    └─ 중앙 집중식 로그 관리
 
-
+Phase 3: Kubernetes 학습 (3~4주) ☸️
+├─ 3.1) 개념 학습 (온라인 강의)
+│   └─ Pod, Service, Deployment, StatefulSet
+│   └─ Namespace, ConfigMap, Secret
+│
+├─ 3.2) 로컬 테스트 (Minikube)
+│   └─ Kubernetes 클러스터 로컬 구축
+│   └─ 간단한 앱 배포 및 스케일링 테스트
+│
+└─ 3.3) Manifest 파일 작성
+    └─ main-server Deployment
+    └─ redis StatefulSet
+    └─ Service, Ingress 설정
+Phase 4: CI/CD 파이프라인 (2주) 🔄
+├─ 4.1) GitHub Actions 설정
+│   └─ 코드 푸시 → 자동 빌드 → 테스트
+│
+├─ 4.2) Docker Hub 연동
+│   └─ 빌드된 이미지 자동 업로드
+│
+└─ 4.3) 자동 배포 (ArgoCD or Flux)
+    └─ Kubernetes에 자동 배포
+    └─ 롤백 기능
+Phase 5: 라즈베리파이 통합 (2월 이후) 🍓
+├─ 5.1) 라즈베리파이 셋업 (3대)
+│   └─ Raspberry Pi OS 설치
+│   └─ Docker 설치
+│   └─ 정적 IP 설정
+│
+├─ 5.2) Kubernetes 클러스터 확장
+│   └─ 메인서버: Control Plane (마스터)
+│   └─ 라즈베리파이 3대: Worker Nodes
+│   └─ kubeadm으로 조인
+│
+└─ 5.3) 분산 구성 검증
+    └─ Pod이 여러 노드에 분산되는지 확인
+    └─ 노드 간 통신 테스트
+Phase 6: 고급 기능 (1개월) ⚙️
+├─ 6.1) Persistent Storage
+│   └─ Redis 데이터 백업
+│   └─ NFS, Local Storage 설정
+│
+├─ 6.2) 네트워킹
+│   └─ Istio (Service Mesh)
+│   └─ 트래픽 관리
+│
+└─ 6.3) 보안
+    └─ Pod Security Policies
+    └─ Network Policies
+Phase 7: 카오스 엔지니어링 (1.5개월) 🔥
+├─ 7.1) 간단한 장애 시나리오 (3개)
+│   └─ Pod 강제 종료 → 자동 복구 확인
+│   └─ 네트워크 지연 주입 → 응답 시간 확인
+│   └─ 메모리 부족 시뮬레이션
+│
+├─ 7.2) 중간 난이도 (3개)
+│   └─ 노드 다운 → 다른 노드로 마이그레이션
+│   └─ DB 연결 끊김 → 서킷브레이커 동작
+│   └─ 높은 트래픽 → 자동 스케일링
+│
+├─ 7.3) 고급 시나리오 (3개)
+│   └─ 분할된 네트워크 (Split Brain)
+│   └─ Cascading Failure (연쇄 장애)
+│   └─ 데이터 일관성 테스트
+│
+└─ 7.4) 문서화
+    └─ 각 시나리오마다 분석 글 작성
+    └─ GitHub에 케이스 스터디 업로드
+├─ README 작성
+│   └─ 아키텍처 다이어그램
+│   └─ 각 기술 설명
+│
+├─ 블로그 글 (2~3개)
+│   └─ 가장 인상적인 장애 사례
+│   └─ 배운 점과 해결책
+│
+└─ GitHub 구성
+    └─ Clean한 커밋 이력
+    └─ 상세한 이슈/PR 설명
