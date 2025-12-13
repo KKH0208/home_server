@@ -2,9 +2,9 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Response
 from fastapi.middleware.cors import CORSMiddleware
 import json
-from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
-
-
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
+from starlette.responses import Response
+import time
 app = FastAPI()
 
 # CORS 허용 (테스트용)
@@ -84,76 +84,46 @@ async def color_broadcast(websocket: WebSocket):
             del connected_clients_color[player_id]
         print(f"{player_id} 연결 종료")
 
+
+
+
+
+
+
+
+
+
+
+REQUEST_COUNT = Counter(
+    "http_requests_total",
+    "Total HTTP requests",
+    ["method", "path", "status"]
+)
+
+REQUEST_LATENCY = Histogram(
+    "http_request_duration_seconds",
+    "HTTP request latency",
+    ["path"]
+)
+
+@app.middleware("http")
+async def metrics_middleware(request, call_next):
+    start = time.time()
+    response = await call_next(request)
+    latency = time.time() - start
+
+    REQUEST_COUNT.labels(
+        method=request.method,
+        path=request.url.path,
+        status=response.status_code
+    ).inc()
+
+    REQUEST_LATENCY.labels(
+        path=request.url.path
+    ).observe(latency)
+
+    return response
+
 @app.get("/metrics")
 def metrics():
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
-
-################################################################################
-# from fastapi import FastAPI, WebSocket
-# from fastapi.middleware.cors import CORSMiddleware
-
-# app = FastAPI()
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # 테스트용
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# @app.websocket("/ws/chat")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     print("클라이언트 연결됨")
-
-#     await websocket.send_text("안녕 난 서버")
-
-#     while True:
-#         try:
-#             data = await websocket.receive_text()
-#             print(f"Unity로부터 받은 메시지: {data}")
-#             await websocket.send_text(f"서버가 받음: {data}")
-#         except:
-#             print("클라이언트 연결 종료")
-#             break
-
-
-
-
-
-
-
-
-################################################################################
-# from fastapi import FastAPI, WebSocket
-# from fastapi.middleware.cors import CORSMiddleware
-
-# app = FastAPI()
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # 테스트용
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# @app.websocket("/ws/chat")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     print("클라이언트 연결됨")
-
-#     await websocket.send_text("안녕 난 서버")
-
-#     while True:
-#         try:
-#             data = await websocket.receive_text()
-#             print(f"Unity로부터 받은 메시지: {data}")
-#             await websocket.send_text(f"서버가 받음: {data}")
-#         except:
-#             print("클라이언트 연결 종료")
-#             break
-
-
-################################################################################
