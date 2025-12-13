@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   main_server:
     build: . 
@@ -23,30 +24,31 @@ services:
     depends_on:
       - node_exporter
     volumes:
-      -./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
   
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     volumes:
-      -grafana-data:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
     ports:
       - "3000:3000"
     depends_on:
       - prometheus
       - loki
   loki:
-    image: grafana:loki:2.8.2
+    image: grafana/loki:2.8.2
     container_name: loki
     ports:
       - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yml
     volumes:
       - ./loki-config.yml:/etc/loki/local-config.yml:ro
 
   promtail:
     image: grafana/promtail:2.8.2
     container_name: promtail
+    volumes:
       - /var/log:/var/log
       - ./promtail-config.yml:/etc/promtail-config.yml:ro
     command: -config.file=/etc/promtail-config.yml      
@@ -67,7 +69,7 @@ services:
 
 volumes:
   grafana-data:
-  
+
 
 
 

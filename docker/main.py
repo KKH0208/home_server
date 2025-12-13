@@ -1,7 +1,9 @@
 # server.py
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Response
 from fastapi.middleware.cors import CORSMiddleware
 import json
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+
 
 app = FastAPI()
 
@@ -82,7 +84,9 @@ async def color_broadcast(websocket: WebSocket):
             del connected_clients_color[player_id]
         print(f"{player_id} 연결 종료")
 
-
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 ################################################################################
 # from fastapi import FastAPI, WebSocket
