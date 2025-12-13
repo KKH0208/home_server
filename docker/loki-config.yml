@@ -7,11 +7,12 @@ ingester:
     ring:
       kvstore:
         store: inmemory
-
+      replication_factor: 1 
   wal:
     enabled: true
     dir: /loki/wal
-    
+
+
 schema_config:
   configs:
     - from: 2020-10-24
