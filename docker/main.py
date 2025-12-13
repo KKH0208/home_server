@@ -38,7 +38,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
             # 로그 출력 -> 이거 왜 안뜨지 
             print(f"{player_id} 로부터 받은 좌표: {payload}")
-
+            WS_CHAT_CONNECTIONS.inc()
             # 브로드캐스트 (자기 자신 제외)
             for pid, client in connected_clients_chat.items():
                 if pid != player_id:
@@ -104,6 +104,10 @@ REQUEST_LATENCY = Histogram(
     "http_request_duration_seconds",
     "HTTP request latency",
     ["path"]
+)
+WS_CHAT_CONNECTIONS = Counter(
+    "ws_chat_connections_total",
+    "Total WebSocket /ws/chat connections"
 )
 
 @app.middleware("http")
