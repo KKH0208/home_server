@@ -44,14 +44,15 @@ services:
     command: -config.file=/etc/loki/local-config.yml
     volumes:
       - ./loki-config.yml:/etc/loki/local-config.yml:ro
+      - loki-data:/loki
 
   promtail:
     image: grafana/promtail:2.8.2
     container_name: promtail
     volumes:
       - /var/log:/var/log
-      - ./promtail-config.yml:/etc/promtail-config.yml:ro
-    command: -config.file=/etc/promtail-config.yml      
+      - ./promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+    command: -config.file=/etc/promtail/promtail-config.yml
     depends_on:
       - loki
   
@@ -69,7 +70,7 @@ services:
 
 volumes:
   grafana-data:
-
+  loki-data:
 
 
 
