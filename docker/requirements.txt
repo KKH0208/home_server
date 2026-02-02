@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-redis
-sqlalchemy
-websockets
-prometheus_client
